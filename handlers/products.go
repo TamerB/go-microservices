@@ -1,3 +1,17 @@
+// Package classification of Product API
+//
+// Documentation for Product API
+//
+// Schemes: http
+// BasePath: /
+// version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Products:
+// - application/json
+// swagger:meta
 package handlers
 
 import (
@@ -12,21 +26,32 @@ import (
 	"github.com/TamerB/go-microservices/data"
 )
 
+// A list of products returns in the reponse
+// swagger:response productsResponse
+type productsResponseWrappper struct {
+	// All products in the system
+	// in: body
+	Body []data.Product
+}
+
+// swagger:parameters deleteProduct
+type productIdParameterWrapper struct {
+	// The id of the product to delete from the database
+	// in:path
+	// required: true
+	ID int `json:"id"`
+}
+
+// swagger:response noContent
+type productsNoContentWrapper struct {
+}
+
 type Products struct {
 	l *log.Logger
 }
 
 func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
-}
-
-func (p *Products) GetProducts(w http.ResponseWriter, r *http.Request) {
-	lp := data.GetProducts()
-	err := lp.ToJSON(w)
-
-	if err != nil {
-		http.Error(w, "Unable to marshal json", http.StatusInternalServerError)
-	}
 }
 
 func (p *Products) AddProduct(w http.ResponseWriter, r *http.Request) {
